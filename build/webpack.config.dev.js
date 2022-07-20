@@ -7,10 +7,10 @@ module.exports = {
   entry: './src/main.ts',
   // 输出
   output: {
-    path: path.resolve(__dirname, '../', 'dist'),
-    filename: 'static/js/bundle.js',
+    // path: path.resolve(__dirname, '../', 'dist'),
+    filename: 'static/js/bundle.js'
     // 清楚上次打包内容
-    clean: true
+    // clean: true
   },
   // loader
   module: {
@@ -103,6 +103,9 @@ module.exports = {
       template: path.resolve(__dirname, '../', 'index.html')
     })
   ],
+  devServer: {
+    port: '5000'
+  },
   // 模式
   mode: 'development'
 }
