@@ -11,7 +11,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "sideEffects": ["./src/utils/sum2.js"],
+  "sideEffects": ["./src/utils/sum2.js", "./src/utils/sum4.ts"],
   "devDependencies": {
     "@babel/core": "^7.18.9",
     "@babel/plugin-transform-runtime": "^7.18.9",

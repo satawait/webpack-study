@@ -5,5 +5,5 @@ import './styles/index.styl'
 import { sum } from './utils/sum.js'
 
 // eslint-disable-next-line no-unused-vars
-import * as test2 from './utils/sum2.js'
+import './utils/sum2.js'
 sum(5, 40000)

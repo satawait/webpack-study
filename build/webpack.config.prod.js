@@ -25,7 +25,7 @@ const getStyleLoader = (pre) => {
 }
 module.exports = {
   // 入口
-  entry: './src/main.js',
+  entry: './src/main.ts',
   // 输出
   output: {
     path: path.resolve(__dirname, '../', 'dist'),
