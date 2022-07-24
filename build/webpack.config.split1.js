@@ -5,7 +5,7 @@ const EslintPlugin = require('eslint-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
-const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin')
+// const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin')
 
 const threads = os.cpus().length
 
@@ -26,11 +26,14 @@ const getStyleLoader = (pre) => {
 }
 module.exports = {
   // 入口
-  entry: './src/main.ts',
+  entry: {
+    mainJs: './src/main.js',
+    mainTs: './src/main.ts'
+  },
   // 输出
   output: {
     path: path.resolve(__dirname, '../', 'dist'),
-    filename: 'static/js/bundle.min.js',
+    filename: 'static/js/[name].min.js',
     // 清楚上次打包内容
     clean: true
   },
@@ -158,38 +161,61 @@ module.exports = {
       new CssMinimizerPlugin(),
       new TerserPlugin({
         parallel: threads
-      }),
-      // 无损压缩
-      new ImageMinimizerPlugin({
-        minimizer: {
-          implementation: ImageMinimizerPlugin.imageminGenerate,
-          options: {
-            plugins: [
-              ['gifsicle', { interlaced: true }],
-              ['jpegtran', { progress: true }],
-              ['optipng', { optimizationLevel: 5 }],
-              [
-                'svgo',
-                {
-                  plugins: [
-                    'preset-default',
-                    'prefixIds',
-                    {
-                      name: 'sortAttrs',
-                      params: {
-                        xmlnsOrder: 'alphabetical'
-                      }
-                    }
-                  ]
-                }
-              ]
-            ]
-          }
-        }
       })
-    ]
+      // // 无损压缩
+      // new ImageMinimizerPlugin({
+      //   minimizer: {
+      //     implementation: ImageMinimizerPlugin.imageminGenerate,
+      //     options: {
+      //       plugins: [
+      //         ['gifsicle', { interlaced: true }],
+      //         ['jpegtran', { progress: true }],
+      //         ['optipng', { optimizationLevel: 5 }],
+      //         [
+      //           'svgo',
+      //           {
+      //             plugins: [
+      //               'preset-default',
+      //               'prefixIds',
+      //               {
+      //                 name: 'sortAttrs',
+      //                 params: {
+      //                   xmlnsOrder: 'alphabetical'
+      //                 }
+      //               }
+      //             ]
+      //           }
+      //         ]
+      //       ]
+      //     }
+      //   }
+      // })
+    ],
+    splitChunks: {
+      chunks: 'all',
+      minSize: 20000,
+      minRemainingSize: 0,
+      minChunks: 1,
+      maxAsyncRequests: 30,
+      maxInitialRequests: 30,
+      enforceSizeThreshold: 50000,
+      cacheGroups: {
+        defaultVendors: {
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10,
+          reuseExistingChunk: true
+        },
+        default: {
+          minSize: 0,
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true
+        }
+      }
+    }
   },
   // 模式
   mode: 'production',
   devtool: 'source-map'
+  // devtool: false
 }
