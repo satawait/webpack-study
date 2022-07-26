@@ -8,6 +8,9 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
+const AutoImport = require('unplugin-auto-import/webpack')
+const Components = require('unplugin-vue-components/webpack')
+const { ElementPlusResolver } = require('unplugin-vue-components/resolvers')
 // const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin')
 
 const threads = os.cpus().length
@@ -183,6 +186,21 @@ module.exports = {
             }
           }
         ]
+      }),
+      AutoImport({
+        imports: [
+          'vue',
+          'vue-router'
+        ],
+        eslintrc: {
+          enabled: true, // Default `false`
+          filepath: './.eslintrc-auto-import.json', // Default `./.eslintrc-auto-import.json`
+          globalsPropValue: true // Default `true`, (true | false | 'readonly' | 'readable' | 'writable' | 'writeable')
+        },
+        resolvers: [ElementPlusResolver()],
+      }),
+      Components({
+        resolvers: [ElementPlusResolver()],
       })
   ].filter(Boolean),
   optimization: {
