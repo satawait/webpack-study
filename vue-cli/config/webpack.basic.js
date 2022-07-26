@@ -56,7 +56,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(ts|tsx)$/,
+        test: /\.ts$/,
         use: [
           {
             loader: 'thread-loader',

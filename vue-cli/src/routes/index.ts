@@ -7,11 +7,11 @@ export default createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: 'home',
+      path: '/home',
       component: Home
     },
     {
-      path: 'about',
+      path: '/about',
       component: About
     }
   ]

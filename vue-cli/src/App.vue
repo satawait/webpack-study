@@ -1,5 +1,6 @@
 <template>
   <div>Vue</div>
+  <el-button type="primary">点击</el-button>
   <ul>
     <li>
       <router-link to="/home">Home</router-link>
