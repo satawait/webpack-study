@@ -1,7 +1,7 @@
 export const sum = (a, b) => {
-  console.log(a + b - 11115)
+  console.log(a + b - 11666115)
 }
-console.log(22222)
+console.log(222255)
 
 Object.defineProperty(Array.prototype, 'sum', {
   value: function () {

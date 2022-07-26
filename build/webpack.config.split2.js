@@ -26,11 +26,16 @@ const getStyleLoader = (pre) => {
 }
 module.exports = {
   // 入口
-  entry: './src/main.ts',
+  entry: {
+    bundle: './src/main.js'
+  },
   // 输出
   output: {
     path: path.resolve(__dirname, '../', 'dist'),
-    filename: 'static/js/bundle.min.js',
+    filename: 'static/js/[name].[hash:6].js',
+    // assetModuleFilename: 'static/imgs/[hash:6][ext][query]',
+    // filename: 'static/js/bundle.js',
+    chunkFilename: 'static/js/[name].[hash:6].chunk.js',
     // 清楚上次打包内容
     clean: true
   },
@@ -147,7 +152,7 @@ module.exports = {
       template: path.resolve(__dirname, '../', 'index.html')
     }),
     new MiniCssExtractPlugin({
-      filename: 'static/css/bundle.css'
+      filename: 'static/css/[name].[hash:6].css'
     })
   ],
   optimization: {
@@ -188,6 +193,9 @@ module.exports = {
       //   }
       // })
     ]
+    // splitChunks: {
+    //   chunks: 'all'
+    // }
   },
   // 模式
   mode: 'production',

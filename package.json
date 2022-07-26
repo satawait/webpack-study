@@ -7,6 +7,8 @@
     "dev": "webpack server  -c ./build/webpack.config.dev.js",
     "prod": "webpack -c ./build/webpack.config.prod.js",
     "split1": "webpack -c ./build/webpack.config.split1.js",
+    "split2": "webpack -c ./build/webpack.config.split2.js",
+    "split3": "webpack -c ./build/webpack.config.split3.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -14,6 +16,7 @@
   "license": "ISC",
   "sideEffects": [
     "./src/utils/sum2.js",
+    "./src/utils/sum4.ts",
     "*.css",
     "*.less",
     "*.scss",
@@ -23,9 +26,11 @@
     "@babel/core": "^7.18.9",
     "@babel/plugin-transform-runtime": "^7.18.9",
     "@babel/preset-env": "^7.18.9",
+    "@types/core-js": "^2.5.5",
     "@types/node": "^18.0.6",
     "@typescript-eslint/eslint-plugin": "^5.30.7",
     "@typescript-eslint/parser": "^5.30.7",
+    "@vue/preload-webpack-plugin": "^2.0.0",
     "babel-loader": "^8.2.5",
     "clean-webpack-plugin": "^4.0.0",
     "core-js": "^3.23.5",
@@ -48,6 +53,7 @@
     "postcss": "^8.4.14",
     "postcss-loader": "^7.0.1",
     "postcss-preset-env": "^7.7.2",
+    "preload-webpack-plugin": "^2.3.0",
     "prettier": "^2.7.1",
     "sass": "^1.53.0",
     "sass-loader": "^13.0.2",
@@ -60,9 +66,11 @@
     "typescript": "^4.7.4",
     "webpack": "^5.73.0",
     "webpack-cli": "^4.10.0",
-    "webpack-dev-server": "^4.9.3"
+    "webpack-dev-server": "^4.9.3",
+    "workbox-webpack-plugin": "^6.5.3"
   },
   "browserslist": [
+    "ie >= 10",
     "last 2 version",
     "> 1%",
     "not dead"

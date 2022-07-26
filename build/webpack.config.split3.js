@@ -6,6 +6,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 // const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin')
+const PreloadWebpackPlugin = require('@vue/preload-webpack-plugin')
+const WorkboxWebpackPlugin = require('workbox-webpack-plugin')
 
 const threads = os.cpus().length
 
@@ -30,7 +32,10 @@ module.exports = {
   // 输出
   output: {
     path: path.resolve(__dirname, '../', 'dist'),
-    filename: 'static/js/bundle.min.js',
+    filename: 'static/js/[name].[contenthash:6].js',
+    // assetModuleFilename: 'static/imgs/[hash:6][ext][query]',
+    // filename: 'static/js/bundle.js',
+    chunkFilename: 'static/js/[name].[contenthash:6].chunk.js',
     // 清楚上次打包内容
     clean: true
   },
@@ -147,8 +152,21 @@ module.exports = {
       template: path.resolve(__dirname, '../', 'index.html')
     }),
     new MiniCssExtractPlugin({
-      filename: 'static/css/bundle.css'
+      filename: 'static/css/[name].[contenthash:6].css'
+    }),
+    new PreloadWebpackPlugin({
+      rel: 'preload',
+      as: 'script'
+    }),
+    new WorkboxWebpackPlugin.GenerateSW({
+      // 这些选项帮助快速启用 ServiceWorkers
+      // 不允许遗留任何“旧的” ServiceWorkers
+      clientsClaim: true,
+      skipWaiting: true
     })
+    // new PreloadWebpackPlugin({
+    //   rel: 'prefetch'
+    // })
   ],
   optimization: {
     usedExports: true,
@@ -187,7 +205,13 @@ module.exports = {
       //     }
       //   }
       // })
-    ]
+    ],
+    splitChunks: {
+      chunks: 'all'
+    },
+    runtimeChunk: {
+      name: (entrypoint) => `runtime-${entrypoint.name}.js`
+    }
   },
   // 模式
   mode: 'production',
