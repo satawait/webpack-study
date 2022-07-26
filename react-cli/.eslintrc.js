@@ -6,9 +6,9 @@ module.exports = {
     node: true
   },
   extends: [
+    'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
-    'plugin:@typescript-eslint/recommended',
     'eslint:recommended',
     'plugin:prettier/recommended',
     // eslint-config-prettier 的缩写
@@ -58,6 +58,7 @@ module.exports = {
     'no-plusplus': 'off',
     'no-nested-ternary': 'off',
     '@typescript-eslint/no-empty-function': 'warn',
+    '@typescript-eslint/no-var-requires': 0,
     // 'no-undef': 'error',
     semi: ['warn', 'never'],
     'prefer-const': [

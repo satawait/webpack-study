@@ -2,17 +2,16 @@ const path = require('path')
 const os = require('os')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const EslintPlugin = require('eslint-webpack-plugin')
-// const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
-// const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
-// const TerserPlugin = require('terser-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
 // const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin')
 
 const threads = os.cpus().length
 const getStyleLoader = (pre) => {
   return [
-    // MiniCssExtractPlugin.loader, // 插入html中
-    'style-loader',
+    MiniCssExtractPlugin.loader, // 插入html中
     'css-loader',
     {
       loader: 'postcss-loader',
@@ -28,9 +27,10 @@ const getStyleLoader = (pre) => {
 module.exports = {
   entry: './src/main.tsx',
   output: {
-    path: undefined,
-    filename: 'static/js/[name].js',
-    chunkFilename: 'static/js/[name]/chunk.js'
+    path: path.resolve(__dirname, '..', 'dist'),
+    filename: 'static/js/[name].[contenthash:6].js',
+    chunkFilename: 'static/js/[name].[contenthash:6].chunk.js',
+    clean: true
   },
   resolve: {
     alias: {},
@@ -52,7 +52,6 @@ module.exports = {
               {
                 loader: 'babel-loader',
                 options: {
-                  plugins: ['react-refresh/babel'],
                   cacheDirectory: true, // 开启babel缓存
                   cacheCompression: false // 关闭缓存文件压缩
                 }
@@ -122,7 +121,6 @@ module.exports = {
               {
                 loader: 'babel-loader',
                 options: {
-                  plugins: ['react-refresh/babel'],
                   cacheDirectory: true, // 开启babel缓存
                   cacheCompression: false // 关闭缓存文件压缩
                 }
@@ -146,10 +144,32 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '../public', 'index.html')
     }),
-    // new MiniCssExtractPlugin(),
-    new ReactRefreshWebpackPlugin()
+    new MiniCssExtractPlugin({
+      filename: 'static/css/[name].[contenthash:6].css',
+      chunkFilename: 'static/css/[name].[contenthash:6].chunk.css'
+    }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, '../public'),
+          to: path.resolve(__dirname, '../dist'),
+          globOptions: {
+            ignore: ['**/index.html']
+          }
+        }
+      ]
+    })
   ],
   optimization: {
+    usedExports: true,
+    providedExports: true,
+    sideEffects: true,
+    minimizer: [
+      new CssMinimizerPlugin(),
+      new TerserPlugin({
+        parallel: threads
+      })
+    ],
     splitChunks: {
       chunks: 'all'
     },
@@ -157,12 +177,7 @@ module.exports = {
       name: (entrypoint) => `runtime-${entrypoint.name}.js`
     }
   },
-  devServer: {
-    port: '5000',
-    historyApiFallback: true, // 路由404问题
-    hot: true // 默认开启的热更新
-  },
   // 模式
-  mode: 'development',
-  devtool: 'cheap-module-source-map'
+  mode: 'production',
+  devtool: 'source-map'
 }
