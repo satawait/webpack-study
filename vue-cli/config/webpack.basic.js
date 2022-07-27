@@ -38,6 +38,10 @@ const getStyleLoader = (pre) => {
                 javascriptEnabled: true
               }
             }
+          : pre === 'sass-loader'
+          ? {
+              additionalData: `@use "@/assets/styles/element/index.scss" as *;`
+            }
           : {}
     }
   ].filter(Boolean)
@@ -53,7 +57,9 @@ module.exports = {
     clean: true
   },
   resolve: {
-    alias: {},
+    alias: {
+      '@': path.resolve(__dirname, '../src')
+    },
     extensions: ['.vue', '.ts', '.js']
   },
   module: {
@@ -67,6 +73,21 @@ module.exports = {
               works: threads
             }
           },
+          {
+            loader: './loaders/sync-loader.js'
+          },
+          {
+            loader: './loaders/banner-loader',
+            options: {
+              author: 'sam'
+            }
+          },
+          // {
+          //   loader: './loaders/babel-loader',
+          //   options: {
+          //     presets: ['@babel/presets-env']
+          //   }
+          // },
           {
             loader: 'babel-loader',
             options: {
@@ -149,7 +170,11 @@ module.exports = {
       },
       {
         test: /\.vue$/,
-        loader: 'vue-loader'
+        loader: 'vue-loader',
+        options: {
+          cacheDirectory: path.resolve(__dirname, '../node_modules/.cache/vue-loader')
+        },
+        exclude: /node_modules/
       }
     ]
   },
@@ -187,21 +212,22 @@ module.exports = {
           }
         ]
       }),
-      AutoImport({
-        imports: [
-          'vue',
-          'vue-router'
-        ],
-        eslintrc: {
-          enabled: true, // Default `false`
-          filepath: './.eslintrc-auto-import.json', // Default `./.eslintrc-auto-import.json`
-          globalsPropValue: true // Default `true`, (true | false | 'readonly' | 'readable' | 'writable' | 'writeable')
-        },
-        resolvers: [ElementPlusResolver()],
-      }),
-      Components({
-        resolvers: [ElementPlusResolver()],
-      })
+    AutoImport({
+      imports: ['vue', 'vue-router'],
+      eslintrc: {
+        enabled: true, // Default `false`，生成后可关闭
+        filepath: './.eslintrc-auto-import.json', // Default `./.eslintrc-auto-import.json`
+        globalsPropValue: true // Default `true`, (true | false | 'readonly' | 'readable' | 'writable' | 'writeable')
+      },
+      resolvers: [ElementPlusResolver()]
+    }),
+    Components({
+      resolvers: [
+        ElementPlusResolver({
+          importStyle: 'sass'
+        })
+      ]
+    })
   ].filter(Boolean),
   optimization: {
     usedExports: true,
@@ -222,6 +248,11 @@ module.exports = {
           name: 'chunk-vue',
           priority: 40
         },
+        elementPlus: {
+          test: /[\\/]node_modules[\\/]element-plus[\\/]/,
+          name: 'chunk-elementPlus',
+          priority: 30
+        },
         lib: {
           test: /[\\/]node_modules[\\/]/,
           name: 'chunk-lib',
@@ -240,5 +271,6 @@ module.exports = {
   },
   // 模式
   mode: isProduction ? 'production' : 'development',
-  devtool: isProduction ? 'source-map' : 'cheap-module-source-map'
+  devtool: isProduction ? 'source-map' : 'cheap-module-source-map',
+  performance: false
 }
