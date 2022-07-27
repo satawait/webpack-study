@@ -11,6 +11,7 @@ const { VueLoaderPlugin } = require('vue-loader')
 const AutoImport = require('unplugin-auto-import/webpack')
 const Components = require('unplugin-vue-components/webpack')
 const { ElementPlusResolver } = require('unplugin-vue-components/resolvers')
+const BannerWebpackPlugin = require('../plugins/banner-webpack-plugin')
 // const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin')
 
 const threads = os.cpus().length
@@ -76,12 +77,12 @@ module.exports = {
           {
             loader: './loaders/sync-loader.js'
           },
-          {
-            loader: './loaders/banner-loader',
-            options: {
-              author: 'sam'
-            }
-          },
+          // {
+          //   loader: './loaders/banner-loader',
+          //   options: {
+          //     author: 'sam'
+          //   }
+          // },
           // {
           //   loader: './loaders/babel-loader',
           //   options: {
@@ -180,6 +181,9 @@ module.exports = {
   },
   // 插件
   plugins: [
+    new BannerWebpackPlugin({
+      author: 'test'
+    }),
     new DefinePlugin({
       __VUE_OPTIONS_API__: true,
       __VUE_PROD_DEVTOOLS__: false
