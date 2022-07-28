@@ -12,6 +12,9 @@ const AutoImport = require('unplugin-auto-import/webpack')
 const Components = require('unplugin-vue-components/webpack')
 const { ElementPlusResolver } = require('unplugin-vue-components/resolvers')
 const BannerWebpackPlugin = require('../plugins/banner-webpack-plugin')
+const CleanWebpackPlugin = require('../plugins/clean-webpack-plugin')
+const AnalyzeWebpackPlugin = require('../plugins/analyze-webpack-plugin')
+const InlineChunkWebpackPlugin = require('../plugins/inline-chunk-webpack-plugin')
 // const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin')
 
 const threads = os.cpus().length
@@ -50,12 +53,13 @@ const getStyleLoader = (pre) => {
 module.exports = {
   entry: './src/main.ts',
   output: {
+    publicPath: '',
     path: isProduction ? path.resolve(__dirname, '..', 'dist') : undefined,
     filename: isProduction ? 'static/js/[name].[contenthash:6].js' : 'static/js/[name].js',
     chunkFilename: isProduction
       ? 'static/js/[name].[contenthash:6].chunk.js'
-      : 'static/js/[name]/chunk.js',
-    clean: true
+      : 'static/js/[name]/chunk.js'
+    // clean: true
   },
   resolve: {
     alias: {
@@ -231,7 +235,10 @@ module.exports = {
           importStyle: 'sass'
         })
       ]
-    })
+    }),
+    isProduction && new CleanWebpackPlugin(),
+    new AnalyzeWebpackPlugin(),
+    new InlineChunkWebpackPlugin()
   ].filter(Boolean),
   optimization: {
     usedExports: true,
@@ -265,7 +272,7 @@ module.exports = {
       }
     },
     runtimeChunk: {
-      name: (entrypoint) => `runtime-${entrypoint.name}.js`
+      name: (entrypoint) => `runtime-${entrypoint.name}`
     }
   },
   devServer: {

@@ -30,6 +30,7 @@ specifiers:
   postcss-loader: ^7.0.1
   postcss-preset-env: ^7.7.2
   prettier: ^2.7.1
+  safe-require: ^1.0.4
   sass: ^1.53.0
   sass-loader: ^13.0.2
   style-loader: ^3.3.1
@@ -86,6 +87,7 @@ devDependencies:
   postcss-loader: 7.0.1_m6qh27jiicejwnzfgs742cokpe
   postcss-preset-env: 7.7.2_postcss@8.4.14
   prettier: 2.7.1
+  safe-require: registry.npmmirror.com/safe-require/1.0.4
   sass: 1.54.0
   sass-loader: 13.0.2_sass@1.54.0+webpack@5.74.0
   style-loader: 3.3.1_webpack@5.74.0
@@ -6915,6 +6917,12 @@ packages:
       - supports-color
     dev: true
     optional: true
+
+  registry.npmmirror.com/safe-require/1.0.4:
+    resolution: {integrity: sha512-1elAbSH1u7HVMfbuqktLWAN0wMOeT+FnJVqMhBgEJLvL95m+KT433tiJdGMV1e3TstQXRt1YrKQDRBu0Kpk4WA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/safe-require/-/safe-require-1.0.4.tgz}
+    name: safe-require
+    version: 1.0.4
+    dev: true
 
   registry.npmmirror.com/source-map/0.6.1:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/source-map/-/source-map-0.6.1.tgz}
